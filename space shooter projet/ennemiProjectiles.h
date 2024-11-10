@@ -4,7 +4,9 @@
 
 class ennemiProjectiles : public Projectile
 {
+	static sf::Texture Laser_texture_enemy_;
 public:
-	ennemiProjectiles();
+	ennemiProjectiles(const sf::Vector2f& spawn_position);
+	void Move(float dt, sf::Vector2u& window_size);
 };
 #endif // ENNEMIPROJECTILES_H

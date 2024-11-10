@@ -10,10 +10,10 @@ asteroides::asteroides(const sf::Vector2f& spawn_position)
 	asteroides_sprite_.setTexture(asteroides_texture_);
 	asteroides_sprite_.setScale(0.75f, 0.75f);
 	asteroides_sprite_.setPosition(spawn_position);
-	direction_ = { 0, 300};
+	direction_ = { 70, 300};
 }
 
-void asteroides::move(float dt, sf::Vector2u& window_size)
+void asteroides::Move(float dt, sf::Vector2u& window_size)
 {
 	asteroides_sprite_.move(direction_ * dt);
 
@@ -40,6 +40,5 @@ sf::FloatRect asteroides::getHitBox()
 void asteroides::draw(sf::RenderTarget& target, sf::RenderStates states)const
 {
 	states.transform *= getTransform();
-
 	target.draw(asteroides_sprite_, states);
 }

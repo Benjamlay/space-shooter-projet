@@ -22,7 +22,7 @@ void asteroidesManager::Refresh(float dt, sf::Vector2u window_size)
 
 	for (asteroides& p : meteorField_)
 	{
-		p.move(dt, window_size);
+		p.Move(dt, window_size);
 	}
 }
 

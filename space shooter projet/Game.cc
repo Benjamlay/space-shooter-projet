@@ -9,12 +9,16 @@ Game::Game()
 void Game::Loop()
 {
     float cooldown = 1.f;
+    float cooldown2 = 1.f;
     int pv = 0;
     background2.setPosition(0, -680);
 
-    sf::Clock clock2;
+    sf::Clock asteroidsClock;
+    sf::Clock shipsClocks;
     float meteor_spawn_interval = 0.5f;
+    float ships_spawn_interval = 5.f;
 
+	ship1.setPosition(600, 330);
 
     while (window_.isOpen())
     {
@@ -23,16 +27,16 @@ void Game::Loop()
         // commandes du vaisseau ______________________________________________________________________________________________________
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z)){
-            ship1.MoveSpaceship(sf::Vector2f(0, -1), dt);
+            ship1.Move(sf::Vector2f(0, -1), dt);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)){
-            ship1.MoveSpaceship(sf::Vector2f(0, 1), dt);
+            ship1.Move(sf::Vector2f(0, 1), dt);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)){
-            ship1.MoveSpaceship(sf::Vector2f(-1, 0), dt);
+            ship1.Move(sf::Vector2f(-1, 0), dt);
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)){
-            ship1.MoveSpaceship(sf::Vector2f(1, 0), dt);
+            ship1.Move(sf::Vector2f(1, 0), dt);
         }
 
         //background defilant :________________________________________________________________________________________________________
@@ -57,23 +61,35 @@ void Game::Loop()
                 cooldown = 0;
             }
         }
+
+
         // faire apparaitre des asteroides ____________________________________________________________________________________________
 
-        if(clock2.getElapsedTime().asSeconds() >= meteor_spawn_interval)
+        if(asteroidsClock.getElapsedTime().asSeconds() >= meteor_spawn_interval)
         {
             asteroides_.Spawn(sf::Vector2f(rand() % window_.getSize().x, -50.f));
-            clock2.restart();
+            asteroidsClock.restart();
         }
 
-        if (clock2.getElapsedTime().asSeconds() >= meteor_spawn_interval)
+        //faire apparaitre des vaisseaux ennemis_______________________________________________________________________________________
+
+        if(shipsClocks.getElapsedTime().asSeconds() >= ships_spawn_interval)
         {
-	        
+            ennemi_ships_.Spawn(sf::Vector2f(rand() % window_.getSize().x, -50.f));
+            shipsClocks.restart();
+            std::cout << "one more \n";
         }
-        //faire apparaitre des vaisseaux ______________________________________________________________________________________________
 
+        ennemi_ships_.fire_projectile(ennemi_projectiles_, window_.getSize());
 
-
-
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::P))
+        {
+            if(cooldown2 > 0.15f)
+            {
+                ennemi_projectiles_.Spawn_enemy({ 290, 80 });
+                cooldown2 = 0;
+            }
+        }
 
         // projectiles et asteroids se rencontrent t-ils ? ____________________________________________________________________________
 
@@ -113,17 +129,27 @@ void Game::Loop()
     		ship1.GetDamage();
     	}
 
+        // ship1 rencontre-t-il des ennemi_ship ou des ennemi_projectiles ? ___________________________________________________________
+
+        //for(auto )
+
+
         if(pv > 3-1){
-            break;
+            std::cout << "endGame \n";
+            //break;
         }
         //_____________________________________________________________________________________________________________________________
 
+        // refresh ____________________________________________________________________________________________________________________
+
     	ship1.refresh(dt);
+        ennemi_ships_.Refresh(dt, window_.getSize());
         projectiles_.Refresh(dt, window_.getSize());
+        ennemi_projectiles_.Refresh_enemy(dt, window_.getSize());
         asteroides_.Refresh(dt, window_.getSize());
 
-        // clear draw display _______________________________________________________________________________________________________________________
-
+        // clear draw display _________________________________________________________________________________________________________
+        
     	window_.clear();
 
         window_.draw(background1);
@@ -131,6 +157,8 @@ void Game::Loop()
         window_.draw(ship1);
         window_.draw(projectiles_);
         window_.draw(asteroides_);
+        window_.draw(ennemi_ships_);
+        window_.draw(ennemi_projectiles_);
 
         window_.display();
 

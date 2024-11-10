@@ -2,13 +2,15 @@
 
 #include <SFML/Graphics/RenderStates.hpp>
 
+sf::Texture space_ship::texture_sprite;
 
-space_ship::space_ship()
+space_ship::space_ship(const sf::Vector2f& position)
 {
 	texture_sprite.loadFromFile("assets\\playerShip1_orange.png");
 	ship_sprite.setTexture(texture_sprite);
 	ship_sprite.setScale(0.75f, 0.75f);
 	isDamaged_ = false;
+	ship_sprite.setPosition(position);
 
 }
 
@@ -25,6 +27,11 @@ sf::FloatRect space_ship::get_hit_box()
 	hit_box.left += getPosition().x;
 	hit_box.top += getPosition().y;
 	return hit_box;
+}
+
+bool space_ship::is_dead()
+{
+	return isDead;
 }
 
 void space_ship::GetDamage()
@@ -56,7 +63,7 @@ void space_ship::refresh(float dt)
 	}
 }
 
-void space_ship::MoveSpaceship(sf::Vector2f direction, float dt)
+void space_ship::Move(sf::Vector2f direction, float dt)
 {
 	move(speed_ * direction * dt);
 }

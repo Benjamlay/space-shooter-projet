@@ -4,10 +4,18 @@
 
 class ennemi_space_ship : public space_ship
 {
+
+	static sf::Texture ennemi_texture_;
+	sf::Vector2f direction_;
+	sf::Clock Clock_;
+	float lastShotTime_;
+	float shootInterval_ = 1.5f;
 public:
 
-	ennemi_space_ship();
-	void fire_projectile();
+	ennemi_space_ship(const sf::Vector2f& spawn_position);
+	void Move(float dt, sf::Vector2u& window_size);
+	sf::FloatRect getHitBox();
+	bool CanShoot();
 
 protected:
 

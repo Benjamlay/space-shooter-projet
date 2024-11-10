@@ -14,7 +14,7 @@ class asteroides : public sf::Drawable, public sf::Transformable
 public:
 
 	asteroides(const sf::Vector2f& spawn_position);
-	void move(float dt, sf::Vector2u& window_size);
+	void Move(float dt, sf::Vector2u& window_size);
 	sf::Vector2f getYSize();
 	bool IsDead() const { return IsDead_; }
 	sf::FloatRect getHitBox();
